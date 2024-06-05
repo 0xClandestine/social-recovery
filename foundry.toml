@@ -16,7 +16,7 @@
 [fmt]
   bracket_spacing = true
   int_types = "long"
-  line_length = 100
+  line_length = 80
   multiline_func_header = "attributes_first"
   number_underscore = "thousands"
   quote_style = "double"
