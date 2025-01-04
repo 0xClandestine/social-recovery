@@ -28,7 +28,7 @@ contract AgentDeployer is IAgentDeployer {
         if (commitmentTime == block.timestamp) revert CommitmentNotReady();
 
         agent = LibClone.cloneDeterministic(implementation, salt);
-        
+
         IAgent(agent).initialize(data);
 
         emit Reveal(commitment, agent);
