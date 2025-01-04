@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: The Unlicense
 pragma solidity ^0.8.0;
 
-import { Script } from "forge-std/Script.sol";
-
-import { RecoveryManager } from "./../src/RecoveryManager.sol";
-import { SingleUseAgent } from "./../src/SingleUseAgent.sol";
+import "forge-std/Script.sol";
+import "social-recovery/AgentDeployer.sol";
 
 contract Deploy is Script {
     function computeSalt(bytes32 initCodeHash)
@@ -21,24 +19,13 @@ contract Deploy is Script {
         try vm.removeFile(".temp") { } catch { }
     }
 
-    function recoveryManagerInitCodeHash() internal virtual returns (bytes32) {
-        return keccak256(abi.encodePacked(type(RecoveryManager).creationCode));
+    function agentDeployerInitCodeHash() internal virtual returns (bytes32) {
+        return keccak256(abi.encodePacked(type(AgentDeployer).creationCode));
     }
 
-    function singleUseAgentInitCodeHash() internal virtual returns (bytes32) {
-        return keccak256(abi.encodePacked(type(SingleUseAgent).creationCode));
-    }
-
-    function run()
-        public
-        virtual
-        returns (RecoveryManager m, SingleUseAgent a)
-    {
+    function run() public virtual returns (AgentDeployer d) {
         vm.startBroadcast();
-        m = new RecoveryManager{
-            salt: computeSalt(recoveryManagerInitCodeHash())
-        }();
-        a = new SingleUseAgent{ salt: computeSalt(singleUseAgentInitCodeHash()) }(
+        d = new AgentDeployer{ salt: computeSalt(agentDeployerInitCodeHash()) }(
         );
         vm.stopBroadcast();
     }
