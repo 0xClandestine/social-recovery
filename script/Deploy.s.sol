@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: The Unlicense
 pragma solidity ^0.8.0;
 
-import "forge-std/Script.sol";
-import "social-recovery/AgentDeployer.sol";
+import { Script } from "forge-std/Script.sol";
 
-contract Deploy is Script {
+import { AgentFactory } from "src/AgentFactory.sol";
+
+contract DeployAgentFactory is Script {
     function computeSalt(bytes32 initCodeHash) internal virtual returns (bytes32 salt) {
         string[] memory ffi = new string[](3);
         ffi[0] = "bash";
@@ -16,12 +17,12 @@ contract Deploy is Script {
     }
 
     function agentDeployerInitCodeHash() internal virtual returns (bytes32) {
-        return keccak256(abi.encodePacked(type(AgentDeployer).creationCode));
+        return keccak256(abi.encodePacked(type(AgentFactory).creationCode));
     }
 
-    function run() public virtual returns (AgentDeployer d) {
+    function run() public virtual returns (AgentFactory d) {
         vm.startBroadcast();
-        d = new AgentDeployer{ salt: computeSalt(agentDeployerInitCodeHash()) }();
+        d = new AgentFactory{ salt: computeSalt(agentDeployerInitCodeHash()) }();
         vm.stopBroadcast();
     }
 }

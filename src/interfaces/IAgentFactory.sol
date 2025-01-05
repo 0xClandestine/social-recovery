@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: The Unlicense
 pragma solidity ^0.8.0;
 
-/// @title IAgentDeployer
+/// @title IAgentFactory
 /// @notice This contract facilitates the deployment of counterfactual recovery agents, which are
 /// used for secure account recovery in smart contract wallets. These recovery agents are deployed
 /// using the `CREATE2` opcode (EIP-1014), enabling their addresses to be precomputed prior to
@@ -21,14 +21,13 @@ pragma solidity ^0.8.0;
 ///     from a counterfactual address (appearing as an externally owned account) to an active smart
 ///     contract.
 /// 4. The recovery agent then uses the granted privileges to facilitate account recovery.
-interface IAgentDeployer {
+interface IAgentFactory {
     /// @dev Error thrown when the specified commitment does not exist.
     error NonexistentCommitment();
     /// @dev Error thrown when a commitment is not yet eligible for deployment.
     error CommitmentNotReady();
 
     /// @notice Emitted when a new commitment to deploy a recovery agent is successfully created.
-    /// @dev A commitment represents a secure and immutable intent to deploy an agent in the future.
     /// @param commitment The unique hash representing the commitment to deploy the agent.
     event Commit(bytes32 indexed commitment);
 
@@ -39,9 +38,6 @@ interface IAgentDeployer {
     event Reveal(bytes32 indexed commitment, address agent);
 
     /// @notice Creates a commitment to deploy a recovery agent in the future.
-    /// @dev This method locks in the deployment parameters for an agent, ensuring its address is
-    /// predetermined and immune to front-running or tampering. This step is essential to preserve
-    /// the integrity of the deployment process.
     /// @param commitment The unique hash representing the commitment to deploy the agent.
     function commit(bytes32 commitment) external;
 

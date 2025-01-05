@@ -5,7 +5,7 @@
   ffi = true
   fs_permissions = [{ access = "read-write", path = "./"}]
   remappings = [
-    "social-recovery=src/"
+    "safe-smart-account/=lib/safe-smart-account/contracts"
   ]
 
 [profile.ci]
