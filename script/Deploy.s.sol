@@ -5,11 +5,7 @@ import "forge-std/Script.sol";
 import "social-recovery/AgentDeployer.sol";
 
 contract Deploy is Script {
-    function computeSalt(bytes32 initCodeHash)
-        internal
-        virtual
-        returns (bytes32 salt)
-    {
+    function computeSalt(bytes32 initCodeHash) internal virtual returns (bytes32 salt) {
         string[] memory ffi = new string[](3);
         ffi[0] = "bash";
         ffi[1] = "create2.sh";
@@ -25,8 +21,7 @@ contract Deploy is Script {
 
     function run() public virtual returns (AgentDeployer d) {
         vm.startBroadcast();
-        d = new AgentDeployer{ salt: computeSalt(agentDeployerInitCodeHash()) }(
-        );
+        d = new AgentDeployer{ salt: computeSalt(agentDeployerInitCodeHash()) }();
         vm.stopBroadcast();
     }
 }

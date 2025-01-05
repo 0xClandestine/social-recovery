@@ -25,21 +25,14 @@ contract DeployTest is AgentDeployerTest {
 }
 
 contract FlowTest is AgentDeployerTest {
-    function testFuzz_Flow(address revealer, bytes32 digest, bytes32 salt)
-        public
-        virtual
-    {
-        bytes32 commitment = keccak256(
-            abi.encodePacked(revealer, address(ownableAgentImpl), salt)
-        );
+    function testFuzz_Flow(address revealer, bytes32 digest, bytes32 salt) public virtual {
+        bytes32 commitment = keccak256(abi.encodePacked(revealer, address(ownableAgentImpl), salt));
 
         vm.startPrank(revealer);
         agentDeployer.commit(commitment);
         vm.warp(block.timestamp + 1);
         OwnableAgent agent = OwnableAgent(
-            agentDeployer.reveal(
-                address(ownableAgentImpl), salt, abi.encode(revealer)
-            )
+            agentDeployer.reveal(address(ownableAgentImpl), salt, abi.encode(revealer))
         );
 
         assertEq(agent.owner(), revealer);
